@@ -38,7 +38,6 @@ const typeOptions = [
   { value: 'plastic', label: 'Plástico' },
   { value: 'glass', label: 'Vidro' },
   { value: 'metal', label: 'Metal' },
-  // A CORREÇÃO ESTÁ AQUI:
   { value: 'other', label: 'Outros' },
 ];
 
@@ -59,30 +58,32 @@ const MapSection = () => {
         <h2 className="section-title">Mapa de Reports</h2>
         
         <div className="filter-controls">
-          <div className="filter-group">
-            <strong>Status:</strong>
-            {statusOptions.map(option => (
-              <button
-                key={option.value}
-                className={`filter-btn ${statusFilter === option.value ? 'active' : ''}`}
-                onClick={() => setStatusFilter(option.value)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
+          <div className="filter-groups-wrapper">
+            <div className="filter-group">
+              <strong>Status:</strong>
+              {statusOptions.map(option => (
+                <button
+                  key={option.value}
+                  className={`filter-btn ${statusFilter === option.value ? 'active' : ''}`}
+                  onClick={() => setStatusFilter(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
 
-          <div className="filter-group">
-            <strong>Tipo:</strong>
-            {typeOptions.map(option => (
-              <button
-                key={option.value}
-                className={`filter-btn ${typeFilter === option.value ? 'active' : ''}`}
-                onClick={() => setTypeFilter(option.value)}
-              >
-                {option.label}
-              </button>
-            ))}
+            <div className="filter-group">
+              <strong>Tipo:</strong>
+              {typeOptions.map(option => (
+                <button
+                  key={option.value}
+                  className={`filter-btn ${typeFilter === option.value ? 'active' : ''}`}
+                  onClick={() => setTypeFilter(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="search-bar">
@@ -90,27 +91,30 @@ const MapSection = () => {
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
           </div>
         </div>
-
-        <MapContainer
-          center={[-2.53, -44.30]}
-          zoom={13}
-          style={{ height: '500px', width: '100%', borderRadius: '10px', marginTop: '1.5rem' }}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' />
-          {isLoading && <p>Carregando reports...</p>}
-          {error && <p>Falha ao carregar os reports.</p>}
-          {reports && reports.map((report) => (
-            <Marker key={report._id} position={[report.lat, report.lng]}>
-              <Popup>
-                <strong>Tipo:</strong> {typeTranslations[report.type] || report.type}<br />
-                <strong>Status:</strong> {statusTranslations[report.status] || report.status}<br />
-                <strong>Descrição:</strong> {report.description}<br />
-                <strong>Reportado por:</strong> {report.userName || 'Anônimo'}<br />
-                <strong>Data:</strong> {new Date(report.createdAt).toLocaleString('pt-BR')}
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+        
+        {/* Nova div para dar personalidade ao mapa */}
+        <div className="map-card">
+            <MapContainer
+              center={[-2.53, -44.30]}
+              zoom={13}
+              style={{ height: '100%', width: '100%' }}
+            >
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' />
+              {isLoading && <p>Carregando reports...</p>}
+              {error && <p>Falha ao carregar os reports.</p>}
+              {reports && reports.map((report) => (
+                <Marker key={report._id} position={[report.lat, report.lng]}>
+                  <Popup>
+                    <strong>Tipo:</strong> {typeTranslations[report.type] || report.type}<br />
+                    <strong>Status:</strong> {statusTranslations[report.status] || report.status}<br />
+                    <strong>Descrição:</strong> {report.description}<br />
+                    <strong>Reportado por:</strong> {report.userName || 'Anônimo'}<br />
+                    <strong>Data:</strong> {new Date(report.createdAt).toLocaleString('pt-BR')}
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+        </div>
       </div>
     </section>
   );

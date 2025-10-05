@@ -9,10 +9,10 @@
 
 /* --- Paleta de Cores e Configurações Globais --- */
 :root {
-  --primary-color: #159895;
-  --dark-blue: #1a5f7a;
-  --accent-color: #57C5B6;
-  --light-bg: #f5f9fc;
+  --primary-color: #159895; /* Cor principal, pode ser mantida */
+  --dark-blue: #1a5f7a; /* Azul escuro, pode ser mantido */
+  --accent-color: #20ac99;
+  --light-bg: #f5f9fc; /* Fundo claro, pode ser mantido */
   --white-color: #FFFFFF;
   --text-color: #333;
   --text-light: #4a5568;
@@ -130,7 +130,7 @@ nav {
 
 .btn {
     display: inline-block;
-    background: var(--accent-color);
+    background: var(--accent-color); /* Agora usará a nova cor */
     color: var(--white-color);
     padding: 0.7rem 1.5rem;
     border-radius: 50px;
@@ -139,14 +139,15 @@ nav {
     transition: all 0.3s ease;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(87, 197, 182, 0.2);
+    box-shadow: 0 4px 15px rgba(249, 116, 94, 0.2);
 }
 
 .btn:hover {
-    background: #45a894;
+    background: #E86551; /* Uma tonalidade um pouco mais escura para o hover */
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(87, 197, 182, 0.3);
+    box-shadow: 0 6px 20px rgba(249, 116, 94, 0.3);
 }
+
 
 .hamburger-btn {
   display: none; /* Escondido por padrão */
@@ -602,14 +603,21 @@ select, input[type="text"] {
 /* --- Estilos dos Novos Filtros do Mapa --- */
 .filter-controls {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Alinha os itens em uma coluna, um abaixo do outro */
   gap: 1.5rem;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
+  align-items: center; /* Centraliza horizontalmente */
+  padding: 1.5rem; /* Aumenta um pouco o padding para dar mais ar */
   background-color: var(--white-color);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.filter-groups-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem; /* Adiciona um espaçamento entre os grupos de filtro */
+  justify-content: center;
+  width: 100%; /* Garante que o wrapper ocupe toda a largura */
 }
 
 .filter-group {
@@ -622,6 +630,7 @@ select, input[type="text"] {
 .filter-group strong {
   color: var(--dark-blue);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .filter-btn {
@@ -649,18 +658,21 @@ select, input[type="text"] {
 
 .search-bar {
   position: relative;
-  display: flex;
-  align-items: center;
+  width: 100%; /* A barra de pesquisa agora ocupa toda a largura */
+  max-width: 400px; /* Limita a largura para evitar que seja muito grande em telas de desktop */
+  margin-top: 1rem;
 }
 
 .search-bar input {
-  padding-right: 2.5rem; /* Espaço para o ícone */
-  min-width: 250px;
+  padding-right: 2.5rem;
+  width: 100%;
 }
 
 .search-bar svg {
   position: absolute;
   right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
   color: #aaa;
 }
 
@@ -671,4 +683,756 @@ select, input[type="text"] {
   overflow: hidden; /* Garante que o mapa fique dentro das bordas arredondadas */
   border: 1px solid #ddd;
   margin-top: 0.5rem;
+}
+
+/* Responsividade adicional para telas menores */
+@media (min-width: 768px) {
+  .filter-controls {
+    flex-direction: row; /* Volta a alinhar em linha em telas maiores */
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .filter-groups-wrapper {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .search-bar {
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+
+/* --- Novo Preloader Gota com Ondas --- */
+
+.preloader-drop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--dark-blue);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: opacity 1.2s ease-in-out;
+  opacity: 1;
+}
+
+.preloader-drop.exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.drop-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  height: 200px;
+  width: 200px;
+  z-index: 2;
+}
+
+.drop {
+  position: absolute;
+  top: -25%;
+  width: 100%;
+  height: 100%;
+  border-radius: 100% 5% 100% 100%;
+  transform: rotate(-45deg);
+  margin: 0px;
+  background: rgba(255, 255, 255, 0.85);
+  animation: drip 2s forwards;
+}
+
+.drop h1 {
+  color: var(--dark-blue);
+  position: absolute;
+  font-size: 2.5rem;
+  z-index: 2;
+  margin: 0;
+  text-align: center;
+  opacity: 0;
+  animation: appear 2s 2.5s forwards;
+  font-weight: 600;
+  /* Centraliza o texto dentro da gota */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1.2;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.drop-container:before,
+.drop-container:after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 55%;
+  right: 50%;
+  transform: translate(50%) rotateX(75deg);
+  border-radius: 100%;
+  opacity: 0;
+  width: 75%;
+  height: 75%;
+  border: 5px solid var(--accent-color);
+  animation: dripple 2s ease-out 1s;
+}
+
+.drop-container:after {
+  animation: dripple 2s ease-out 1.7s;
+}
+
+@keyframes drip {
+  0%, 45% {
+    top: -25%;
+    border-radius: 100% 5% 100% 100%;
+    transform: rotate(-45deg);
+  }
+  100% {
+    top: 0;
+    transform: rotate(0deg);
+    border-radius: 100%;
+  }
+}
+
+@keyframes dripple {
+  0% {
+    width: 150px;
+    height: 150px;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    width: 500px;
+    height: 500px;
+    top: -20%;
+    opacity: 0;
+  }
+}
+
+/* Remove os estilos do preloader antigo */
+.preloader {
+  display: none;
+}
+
+/* src/app/globals.css (Versão Final Completa) */
+
+/* 1. Diretivas obrigatórias do Tailwind CSS no topo */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2. Todo o nosso CSS customizado abaixo */
+
+/* --- Paleta de Cores e Configurações Globais --- */
+:root {
+  --primary-color: #159895; /* Cor principal, pode ser mantida */
+  --dark-blue: #1a5f7a; /* Azul escuro, pode ser mantido */
+  --accent-color: #20ac99;
+  --light-bg: #f5f9fc; /* Fundo claro, pode ser mantido */
+  --white-color: #FFFFFF;
+  --text-color: #333;
+  --text-light: #4a5568;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif; /* Aplica a nova fonte */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* --- AJUSTES PARA O EFEITO DE ONDULAÇÃO --- */
+
+/* Propriedades comuns para as secções com o efeito */
+.hero,
+.features,
+.site-footer {
+  /* Essencial para que o canvas do efeito fique contido dentro da secção */
+  position: relative;
+  overflow: hidden;
+
+  /* O truque do pixel transparente para o plugin funcionar com cores sólidas */
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+}
+
+/* FIM DOS AJUSTES PARA O EFEITO */
+
+
+/* --- Header e Navegação --- */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, rgba(26, 95, 122, 0.85) 0%, rgba(21, 152, 149, 0.85) 100%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--white-color);
+  padding: 1rem 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--white-color);
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover {
+  opacity: 0.85;
+}
+
+.logo-icon {
+  margin-right: 0;
+  font-size: inherit;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: var(--white-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-links a:hover {
+    color: #c5fffd;
+    border-bottom-color: #c5fffd;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-greeting {
+  font-weight: 500;
+  display: none; /* Escondido por padrão, aparece em telas maiores */
+}
+@media (min-width: 1024px) {
+  .user-greeting {
+    display: block; /* Mostra a saudação em telas de desktop */
+  }
+}
+
+.btn {
+    display: inline-block;
+    background: var(--accent-color);
+    color: var(--white-color);
+    padding: 0.7rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(87, 197, 182, 0.2);
+}
+
+.btn:hover {
+    background: #45a894;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(87, 197, 182, 0.3);
+}
+
+
+.hamburger-btn {
+  display: none; /* Escondido por padrão */
+  background: none;
+  border: none;
+  color: var(--white-color);
+  cursor: pointer;
+  z-index: 101;
+}
+
+.mobile-menu {
+  display: none; /* Escondido por padrão */
+}
+
+/* --- Seção Hero com Shape Divider --- */
+.hero {
+    padding: 4rem 0 8rem 0;
+    text-align: center;
+    background-color: #f0f8ff;
+    /* position e overflow já foram adicionados acima */
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 100px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" style="fill: %23f5f9fc;"></path></svg>');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--dark-blue);
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    color: var(--text-light);
+}
+
+/* --- Seção Features Melhorada --- */
+.features {
+    padding: 4rem 0;
+    background-color: var(--light-bg);
+    /* position e overflow já foram adicionados acima */
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--dark-blue);
+    font-size: 2.25rem;
+    font-weight: 600;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: var(--white-color);
+    border-radius: 12px;
+    padding: 2.5rem 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s ease;
+    text-align: center;
+    border-top: 4px solid var(--primary-color);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: var(--white-color);
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 16px rgba(21, 152, 149, 0.3);
+}
+
+.feature-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.feature-card h3 {
+    margin-bottom: 1rem;
+    color: var(--dark-blue);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* --- Mapa e Outras Seções --- */
+.map-section {
+  position: relative; /* Essencial para que a camada overlay se posicione corretamente */
+  padding: 2rem 0 4rem;
+  background-color: var(--light-bg); /* A cor de fundo permanece aqui */
+}
+.ripple-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* Garante que fica por cima do conteúdo da secção, mas abaixo do header */
+  pointer-events: none; /* ESSENCIAL: Permite que os cliques "atravessem" a camada e cheguem ao mapa */
+
+  /* O truque do pixel transparente para o plugin funcionar */
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+}
+#map {
+    height: 500px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Nova classe para o card do mapa */
+.map-card {
+  background: var(--white-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  margin-top: 1.5rem;
+  height: 500px; /* Garante que o mapa tenha uma altura definida */
+}
+
+/* Ajusta o MapContainer dentro do card */
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* --- ESTILOS DOS NOVOS FILTROS DO MAPA (CORRIGIDO) --- */
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap; /* Adiciona o `flex-wrap` para quebra de linha */
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background-color: var(--white-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-group strong {
+  color: var(--dark-blue);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background-color: var(--white-color);
+  color: var(--text-light);
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background-color: #eef2f5;
+  border-color: #ccc;
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(21, 152, 149, 0.3);
+}
+
+.search-bar {
+  position: relative;
+  /* Garante que ocupe todo o espaço disponível na linha de baixo quando necessário */
+  flex-grow: 1; 
+  /* Ajusta a largura mínima para evitar quebra inadequada */
+  min-width: 250px;
+}
+
+.search-bar input {
+  padding-right: 2.5rem; /* Espaço para o ícone */
+  width: 100%;
+}
+
+.search-bar svg {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+/* REINTEGRAÇÃO: Estilo do mapa no modal de reporte */
+.report-map-container {
+  height: 250px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden; 
+  border: 1px solid #ddd;
+  margin-top: 0.5rem;
+}
+
+
+/* --- Formulários --- */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark-blue);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.close-modal {
+    float: right;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* --- Rodapé --- */
+.site-footer {
+  background-color: var(--dark-blue);
+  color: #a0aec0;
+  padding: 0 0 2rem 0;
+  text-align: left;
+  /* position e overflow já foram adicionados acima */
+}
+
+/* --- Divisor de Onda --- */
+
+
+.footer-shape-divider svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 100px;
+}
+
+.footer-shape-divider .shape-fill {
+    fill: var(--light-bg); /* Cor do fundo da seção acima do rodapé */
+}
+
+/* --- Grid do Rodapé --- */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-top: 8rem;
+}
+
+.footer-about .logo {
+  color: var(--white-color);
+  margin-bottom: 1rem;
+}
+
+.footer-about p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.footer-links h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white-color);
+  margin-bottom: 1rem;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+  color: #a0aec0;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--accent-color);
+  padding-left: 5px;
+}
+
+.footer-social h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white-color);
+  margin-bottom: 1rem;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icons a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--white-color);
+  transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+  background-color: var(--accent-color);
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.9rem;
+}
+
+/* --- Responsividade do Rodapé --- */
+@media (max-width: 768px) {
+  .site-footer {
+    text-align: center;
+  }
+  .footer-grid {
+    text-align: center;
+  }
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 768px) {
+    .nav-links, .nav-actions {
+        display: none; /* Esconde os menus de desktop */
+    }
+    
+    .hamburger-btn {
+        display: block; /* Mostra o botão hambúrguer */
+    }
+
+    .mobile-menu {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      position: absolute;
+      top: 100%; /* Logo abaixo do header */
+      left: 0;
+      width: 100%;
+      background: linear-gradient(135deg, rgba(26, 95, 122, 0.95) 0%, rgba(21, 152, 149, 0.95) 100%);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      padding: 2rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .mobile-menu a {
+      color: var(--white-color);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    .map-controls {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .filter-group {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
 }

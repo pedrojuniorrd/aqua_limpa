@@ -9,15 +9,15 @@ export default function ClientWrapper({ children }: { children: React.ReactNode 
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    // Inicia a animação de saída após 2.5 segundos
+    // Inicia a animação de saída após 4.5 segundos (2.5s para a animação de "aparecer" + 2s de duração)
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
-    }, 2500);
+    }, 4500);
 
-    // Remove completamente o preloader do DOM após a animação terminar (2.5s + 1.2s da animação)
+    // Remove completamente o preloader do DOM após a animação terminar (4.5s + 1.2s da transição)
     const loadTimer = setTimeout(() => {
       setIsLoading(false);
-    }, 3700);
+    }, 5700);
 
     // Limpa os timers se o componente for desmontado
     return () => {
