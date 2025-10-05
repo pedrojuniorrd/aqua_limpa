@@ -1,13 +1,12 @@
 // src/components/MapSection.tsx
 'use client';
 
-import { useState } from 'react'; // Precisamos do useState
+import { useState } from 'react';
 import useSWR from 'swr';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// ... (Interface Report e correção do Ícone continuam iguais)
 interface Report {
   _id: string; lat: number; lng: number; type: string;
   status: 'reported' | 'in_progress' | 'cleaned';
@@ -27,37 +26,38 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const typeTranslations: { [key: string]: string } = { plastic: 'Plástico', glass: 'Vidro', metal: 'Metal', other: 'Outros' };
 const statusTranslations: { [key: string]: string } = { reported: 'Reportado', in_progress: 'Em Limpeza', cleaned: 'Limpo' };
 
-// Opções para os botões de filtro
 const statusOptions = [
   { value: 'all', label: 'Todos' },
   { value: 'reported', label: 'Reportado' },
   { value: 'in_progress', label: 'Em Limpeza' },
   { value: 'cleaned', label: 'Limpo' },
 ];
+
 const typeOptions = [
   { value: 'all', label: 'Todos' },
   { value: 'plastic', label: 'Plástico' },
   { value: 'glass', label: 'Vidro' },
   { value: 'metal', label: 'Metal' },
+  // A CORREÇÃO ESTÁ AQUI:
   { value: 'other', label: 'Outros' },
 ];
 
 
 const MapSection = () => {
-  // Estados para controlar os filtros selecionados
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
 
-  // Constrói a URL da API dinamicamente com base nos filtros
   const apiUrl = `/api/reports?status=${statusFilter}&type=${typeFilter}`;
   const { data: reports, error, isLoading } = useSWR<Report[]>(apiUrl, fetcher);
 
   return (
     <section className="map-section" id="mapa">
+      {/* Esta div transparente irá receber o efeito de ondulação */}
+      <div className="ripple-overlay"></div>
+
       <div className="container">
         <h2 className="section-title">Mapa de Reports</h2>
         
-        {/* --- NOVOS CONTROLES DE FILTRO --- */}
         <div className="filter-controls">
           <div className="filter-group">
             <strong>Status:</strong>
@@ -96,7 +96,6 @@ const MapSection = () => {
           zoom={13}
           style={{ height: '500px', width: '100%', borderRadius: '10px', marginTop: '1.5rem' }}
         >
-          {/* ... (TileLayer e lógica de renderização dos Markers) ... */}
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' />
           {isLoading && <p>Carregando reports...</p>}
           {error && <p>Falha ao carregar os reports.</p>}

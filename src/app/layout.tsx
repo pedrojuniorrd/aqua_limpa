@@ -1,12 +1,12 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
-// 1. Importe a fonte 'Poppins' do Next/Google
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import ClientWrapper from "@/components/ClientWrapper";
+// 1. Importe o novo gestor de efeitos
+import EffectsManager from "@/components/EffectsManager";
 
-// 2. Configure a fonte
 const poppins = Poppins({ 
   subsets: ["latin"],
   weight: ['400', '500', '600', '700'] 
@@ -24,13 +24,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      {/* 3. Aplique a classe da fonte ao body */}
       <body className={poppins.className}>
         <AuthProvider>
           <ClientWrapper>
             {children}
           </ClientWrapper>
         </AuthProvider>
+
+        {/* 2. Adicione o gestor de efeitos aqui. Ele cuidará de tudo. */}
+        <EffectsManager />
       </body>
     </html>
   );

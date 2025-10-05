@@ -36,6 +36,23 @@ body {
     padding: 0 15px;
 }
 
+/* --- AJUSTES PARA O EFEITO DE ONDULAÇÃO --- */
+
+/* Propriedades comuns para as secções com o efeito */
+.hero,
+.features,
+.site-footer {
+  /* Essencial para que o canvas do efeito fique contido dentro da secção */
+  position: relative;
+  overflow: hidden;
+
+  /* O truque do pixel transparente para o plugin funcionar com cores sólidas */
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+}
+
+/* FIM DOS AJUSTES PARA O EFEITO */
+
+
 /* --- Header e Navegação --- */
 header {
   position: sticky;
@@ -146,18 +163,17 @@ nav {
 
 /* --- Seção Hero com Shape Divider --- */
 .hero {
-    padding: 4rem 0 8rem 0; /* Aumenta o padding inferior */
+    padding: 4rem 0 8rem 0;
     text-align: center;
     background-color: #f0f8ff;
-    position: relative;
-    overflow: hidden;
+    /* position e overflow já foram adicionados acima */
 }
 
 .hero::after {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -1px; /* Cobre a linha reta */
+  bottom: -1px;
   width: 100%;
   height: 100px;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" style="fill: %23f5f9fc;"></path></svg>');
@@ -183,6 +199,7 @@ nav {
 .features {
     padding: 4rem 0;
     background-color: var(--light-bg);
+    /* position e overflow já foram adicionados acima */
 }
 
 .section-title {
@@ -241,10 +258,22 @@ nav {
 
 /* --- Mapa e Outras Seções --- */
 .map-section {
-    padding: 2rem 0 4rem;
-    background-color: var(--light-bg);
+  position: relative; /* Essencial para que a camada overlay se posicione corretamente */
+  padding: 2rem 0 4rem;
+  background-color: var(--light-bg); /* A cor de fundo permanece aqui */
 }
+.ripple-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10; /* Garante que fica por cima do conteúdo da secção, mas abaixo do header */
+  pointer-events: none; /* ESSENCIAL: Permite que os cliques "atravessem" a camada e cheguem ao mapa */
 
+  /* O truque do pixel transparente para o plugin funcionar */
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+}
 #map {
     height: 500px;
     width: 100%;
@@ -334,9 +363,9 @@ select, input[type="text"] {
 .site-footer {
   background-color: var(--dark-blue);
   color: #a0aec0;
-  padding: 0 0 2rem 0; /* 1. Removemos o padding-top daqui */
+  padding: 0 0 2rem 0;
   text-align: left;
-  position: relative;
+  /* position e overflow já foram adicionados acima */
 }
 
 /* --- Divisor de Onda --- */
@@ -359,7 +388,7 @@ select, input[type="text"] {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2rem;
   margin-bottom: 2rem;
-  padding-top: 8rem; /* 2. Adicionamos o padding-top aqui */
+  padding-top: 8rem;
 }
 
 .footer-about .logo {
