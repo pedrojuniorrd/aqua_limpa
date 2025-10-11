@@ -1436,3 +1436,82 @@ nav {
         align-items: stretch;
     }
 }
+
+/* --- ESTILOS DOS NOVOS FILTROS DO MAPA (CORRIGIDO) --- */
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background-color: var(--white-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-group strong {
+  color: var(--dark-blue);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background-color: var(--white-color);
+  color: var(--text-light);
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background-color: #eef2f5;
+  border-color: #ccc;
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(21, 152, 149, 0.3);
+}
+
+.search-bar {
+  position: relative;
+  min-width: 250px;
+  flex: 1 1 auto; /* Permite que a barra de busca cresça e encolha, e ocupe o espaço restante */
+}
+
+.search-bar input {
+  padding-right: 2.5rem; /* Espaço para o ícone */
+  width: 100%;
+}
+
+.search-bar svg {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+/* REINTEGRAÇÃO: Estilo do mapa no modal de reporte */
+.report-map-container {
+  height: 250px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden; 
+  border: 1px solid #ddd;
+  margin-top: 0.5rem;
+}
+
